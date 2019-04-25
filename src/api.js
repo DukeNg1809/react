@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 const API_KEY = "6a630147b3904915a3146c7c2cd1a47d";
-export function useNewsArticles() {
+export function useNewsArticles(search) {
   const [loading, setLoading] = useState(true);
   const [headlines, setHeadlines] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
-    getHeadlines()
+    getHeadlines(search)
       .then(headlines => {
         setHeadlines(headlines);
         setLoading(false);
@@ -14,7 +14,7 @@ export function useNewsArticles() {
         setError(err);
         setLoading(false);
       });
-  }, []);
+  }, [search]);
 
   return {
     loading,
@@ -22,8 +22,8 @@ export function useNewsArticles() {
     error
   };
 }
-function getHeadlines() {
-  const url = `https://newsapi.org/v2/top-headlines?country=au&apiKey=${API_KEY}`;
+function getHeadlines(search) {
+  const url = `https://newsapi.org/v2/top-headlines?country=au&apiKey=${API_KEY}&q=${search}`;
 
   return fetch(url)
     .then(res => res.json())
